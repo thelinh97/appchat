@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
 import { Link } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { signup } from '../actions/authAction'
+
+
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 8},
@@ -10,30 +14,53 @@ const tailLayout = {
 };
 
 const SignUp = () => {
-  const onFinish = values => {
-    console.log('Success:', values);
-  };
+    
+    const [ email, setEmail ] = useState(null);
+    const [ password, setPassword ] = useState(null);
+    const [ passwordAgain, setPasswordAgain ] = useState(null);
+    const [ firstName, setFirstName ] = useState(null);
+    const [ lastName, setLastName ] = useState(null);
+    const dispatch = useDispatch();
 
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };
+    const handleSubmit = () => {
+
+      if ( password === passwordAgain){
+
+      const user = {
+        firstName, lastName, email, password
+      };
+      dispatch(signup(user))
+    }
+    }
 
   return (
     <Form
       {...layout}
       name="basic"
       initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       style={{ marginTop: '50px', marginLeft: '400px' }}
     >
         <h1 style = {{ marginLeft: '250px'}}>Sign Up</h1>
+        <Form.Item
+        label="First name"
+        name="firstname"
+        rules={[{ required: true, message: 'Please input your first name!' }]}
+      >
+        <Input onChange={(e) => { setFirstName( e.target.value )}} />
+      </Form.Item>
       <Form.Item
-        label="Username"
+        label="Last name"
+        name="lastname"
+        rules={[{ required: true, message: 'Please input your last name!' }]}
+      >
+        <Input onChange={(e) => { setLastName( e.target.value )}} />
+      </Form.Item>
+      <Form.Item
+        label="Email"
         name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={[{ required: true, message: 'Please input your email!' }]}
       >
-        <Input />
+        <Input onChange={(e) => { setEmail( e.target.value )}} />
       </Form.Item>
 
       <Form.Item
@@ -41,15 +68,15 @@ const SignUp = () => {
         name="password"
         rules={[{ required: true, message: 'Please input your password!' }]}
       >
-        <Input.Password />
+        <Input.Password onChange={(e) => { setPassword( e.target.value )}} />
       </Form.Item>
 
       <Form.Item
-        label="Password"
-        name="password"
+        label="Password again"
+        name="passwordagain"
         rules={[{ required: true, message: 'Please input your password!' }]}
       >
-        <Input.Password />
+        <Input.Password onChange={(e) => { setPasswordAgain( e.target.value )}} />
       </Form.Item>
 
       <Form.Item {...tailLayout} name="remember" valuePropName="checked">
@@ -57,8 +84,8 @@ const SignUp = () => {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Submit
+        <Button type="primary" htmlType="submit" onClick={() => { handleSubmit() }}>
+          Sign Up
         </Button>
       </Form.Item>
     </Form>
