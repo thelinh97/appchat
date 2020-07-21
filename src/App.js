@@ -6,18 +6,20 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Dashboard from './components/Dashboard'
 import { Route, Switch } from "react-router-dom";
+import MenuTop from './components/MenuTop'
+import PrivateRoute from './components/PrivateRoute';
 
 const { Header, Footer, Content } = Layout;
 
 function App() {
   return (
     <Layout style={{height: '100vh'}}>
-      <Header>Header</Header>
+      <Header><MenuTop/></Header>
       <Content>
         <Switch>
-          <Route exact path='/' component={Login} />
-          <Route exact path='/signup' component={SignUp} />
-          <Route exact path='/dashboard' component={Dashboard} />
+          <PrivateRoute exact path='/' component={Dashboard} />
+          <Route  path='/login' component={Login} />
+          <Route  path='/signup' component={SignUp} />
         </Switch>
       </Content>
       <Footer style={{ textAlign: 'center', marginTop: '20px'}}>App Chat created by The Linh @2020</Footer>

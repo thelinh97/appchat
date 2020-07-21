@@ -3,7 +3,7 @@ import authConstants from 'constants'
 
 export const signup = ( user ) => {
 
-    return ( dispatch ) => {
+    return async ( dispatch ) => {
 
         const db = firestore();
         dispatch({
