@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Row, Col, Divider } from 'antd';
+import React from 'react';
+import { Row, Col } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../actions/authAction'; 

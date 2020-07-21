@@ -67,7 +67,7 @@ export const signin = (user) => {
             db.collection('users')
             .doc(data.user.uid)
             .update({
-                isOnline: false
+                isOnline: true
             })
             .then(() => {
                 const name = data.user.displayName.split(' ');
