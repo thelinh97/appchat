@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect} from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
 import { Layout} from 'antd';
@@ -8,10 +8,22 @@ import Dashboard from './components/Dashboard'
 import { Route, Switch } from "react-router-dom";
 import MenuTop from './components/MenuTop'
 import PrivateRoute from './components/PrivateRoute';
+import { isLoggedInUser } from './actions/authAction';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const { Header, Footer, Content } = Layout;
 
 function App() {
+  const dispatch = useDispatch();
+  const auth = useSelector( state => state.auth );
+
+  useEffect(()=>{
+    if(!auth.authenticated){
+      dispatch( isLoggedInUser() )
+    }
+  },[]);
+
   return (
     <Layout style={{height: '100vh'}}>
       <Header><MenuTop/></Header>

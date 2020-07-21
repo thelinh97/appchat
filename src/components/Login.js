@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { signin } from '../actions/authAction';
+
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 8 },
@@ -11,29 +14,41 @@ const tailLayout = {
 };
 
 const Login = () => {
-  const onFinish = values => {
-    console.log('Success:', values);
-  };
+  
+  const [ email, setEmail ] = useState(null);
+  const [ password, setPassword ] = useState(null);
+  const dispatch = useDispatch();
+  const auth = useSelector( state => state.auth );
 
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };
+
+  const handleLogin = ( e ) => {
+
+    if ( email !== '' && password !== ''){
+    e.preventDefault();
+    dispatch( signin({ email, password }) );
+    
+    }
+
+  }
+  
+
+  if(auth.authenticated){
+    return <Redirect to={`/`} />
+  }
   return (
     <Form
       {...layout}
       name="basic"
       initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       style={{ marginTop: '50px', marginLeft: '400px' }}
     >
          <h1 style = {{ marginLeft: '250px'}}>Login</h1>
       <Form.Item
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        label="Email"
+        name="email"
+        rules={[{ required: true, message: 'Please input your email!' }]}
       >
-        <Input />
+        <Input onChange={ (e) => { setEmail( e.target.value )}}/>
       </Form.Item>
 
       <Form.Item
@@ -41,7 +56,7 @@ const Login = () => {
         name="password"
         rules={[{ required: true, message: 'Please input your password!' }]}
       >
-        <Input.Password />
+        <Input.Password onChange={ (e) => { setPassword( e.target.value )}} />
       </Form.Item>
 
       <Form.Item {...tailLayout} name="remember" valuePropName="checked">
@@ -49,7 +64,7 @@ const Login = () => {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit"  >
+        <Button type="primary" htmlType="submit" onClick={ (e) => { handleLogin (e)}} >
          Login
         </Button>
       </Form.Item>

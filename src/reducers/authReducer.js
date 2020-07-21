@@ -1,4 +1,4 @@
-import authConstants from 'constants';
+import {authConstants} from '../actions/constants';
 
 const initState = {
     firstName: '',
@@ -32,6 +32,17 @@ export default ( state = initState , action ) => {
                 authenticated: false,
                 authenticating: false,
                 error: action.payload.error
+            }
+            break;
+        case `${ authConstants.USER_LOGOUT}_REQUEST`:
+            break;
+        case `${ authConstants.USER_LOGOUT}_SUCCESS`:
+            state = { ...initState }
+            break;
+        case `${ authConstants.USER_LOGOUT}_FAILURE`:
+            state = {
+                ...state,
+                error : action.payload.error
             }
             break;
     }

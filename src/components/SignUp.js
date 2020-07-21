@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
-import { Link } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import { signup } from '../actions/authAction'
+import { Link, Redirect } from "react-router-dom";
+import { useDispatch , useSelector } from 'react-redux';
+import { signup } from '../actions/authAction';
+
 
 
 const layout = {
@@ -21,6 +22,7 @@ const SignUp = () => {
     const [ firstName, setFirstName ] = useState(null);
     const [ lastName, setLastName ] = useState(null);
     const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth)
 
     const handleSubmit = () => {
 
@@ -31,6 +33,12 @@ const SignUp = () => {
       };
       dispatch(signup(user))
     }
+    }
+    
+    if(auth.authenticated){
+
+      return <Redirect to={`/`} />
+
     }
 
   return (
