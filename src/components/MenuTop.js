@@ -26,8 +26,8 @@ const MenuTop = () => {
         <Col span={6} order={3}>
              <NavLink to='/signup' style={{color: 'white'}} >Sign Up</NavLink>
         </Col> : null }
-        <Col span={4} order={4}>
-            { auth.authenticated ? `Hi ${auth.firstName} ${auth.lastName}`: null}
+        <Col span={4} order={4} style = {{ cursor: 'pointer' }}>
+          <NavLink to='/personalpage' style={{ color: 'white'}} >{ auth.authenticated ? `Hi ${auth.firstName} ${auth.lastName}`: null}</NavLink>
         </Col>
         { auth.authenticated ? 
         <Col span={6} order={5} style={{ cursor: 'pointer'}} onClick={ handleLogOut }  >

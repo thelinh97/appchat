@@ -77,7 +77,8 @@ export const signin = (user) => {
                 firstName,
                 lastName,
                 email: data.user.email,
-                uid: data.user.uid
+                uid: data.user.uid,
+                avatar: data.user.photoURL
             };
             localStorage.setItem('user',JSON.stringify(loggedInUser));
             dispatch({ 

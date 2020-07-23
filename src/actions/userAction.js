@@ -1,5 +1,5 @@
 import { userConstants } from './constants';
-import { firestore } from 'firebase';
+import { firestore, storage, auth } from 'firebase';
 
 export const getRealtimeUser = (uid) => {
     return async dispatch => {
@@ -79,3 +79,60 @@ export const getRealTimeMessage = ( user ) => {
     }
 
 }
+
+export const uploadAvatar = (info, uid) => {
+
+    return  dispatch => {
+
+                dispatch({
+                    type: `${userConstants.UPLOAD_AVATAR_USER}_REQUEST`,
+                    payload: { mess : 'Đang tải ảnh lên ...'}
+                })
+            
+            const img = info.file.originFileObj;
+            console.log(img.name);
+            var uploadTask =  storage().ref(`img/${img.name}`).put(img);
+            uploadTask.on('state_changed', function(snapshot){}, function(error) {
+                // Handle unsuccessful uploads
+                alert(error);
+              }, function() {
+                // Handle successful uploads on complete
+                // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                storage().ref('img').child(img.name).getDownloadURL().then(function(downloadURL) {
+                  console.log(downloadURL);
+                  localStorage.setItem('avatar', downloadURL)
+                  var user = auth().currentUser;
+                    user.updateProfile({
+                    photoURL: downloadURL
+                    }).then(function() {
+                    // Update successful.
+
+                        const db = firestore();
+                        db.collection('users')
+                        .doc(uid)
+                        .update({
+                            avatar: downloadURL
+                        })
+                        .then(() => {
+
+                            dispatch({
+                                type: `${userConstants.UPLOAD_AVATAR_USER}_SUCCESS`
+                            })
+
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    
+                    })
+                    .catch(function(error) {
+                    // An error happened.
+                    dispatch({
+                        type: `${userConstants.UPLOAD_AVATAR_USER}_FAILURE`,
+                        payload: { error }
+                    })
+                    });
+                });
+              });
+             }
+    }

@@ -3,13 +3,14 @@ import './Dashboard.css';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getRealtimeUser, updateMessage, getRealTimeMessage } from '../actions/userAction';
+import avatarDemo from '../img/avatardemo.jpg'
 
 const User = (props) =>{
     const {user, onClick } = props;  
     return(
         <div onClick={ () => { onClick(user) }} className="displayName">
         <div className="displayPic">
-            <img src="https://i.pinimg.com/originals/be/ac/96/beac96b8e13d2198fd4bb1d5ef56cdcf.jpg" alt="" />
+            <img src={user.avatar ? user.avatar : avatarDemo } alt="" />
         </div>
         <div style={{margin: '0 10px', display: 'flex', flex: 1, justifyContent: 'space-between'}}>
         <span style={{fontWeight: 500}}>{user.firstName} {user.lastName}</span>
@@ -94,13 +95,14 @@ export default function Dashboard (props) {
         </div>
         { chatStarted ?
             <div className="chatControls">
-                <textarea 
+                <input
+                style={{width: '100%'}} 
                 value = {message} 
                 onChange = {(e) => { setMessage( e.target.value )}}
                 onKeyPress={(event) => {
                     if (event.key === "Enter") {
                     submitMessage()
-                    }
+                    };
                 }}
                 placeholder = 'Write message'
                 />

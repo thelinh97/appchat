@@ -10,6 +10,7 @@ import MenuTop from './components/MenuTop'
 import PrivateRoute from './components/PrivateRoute';
 import { isLoggedInUser } from './actions/authAction';
 import { useSelector, useDispatch } from 'react-redux';
+import PersonalPage from './components/PersonalPage';
 
 
 const { Header, Footer, Content } = Layout;
@@ -30,6 +31,7 @@ function App() {
       <Content>
         <Switch>
           <PrivateRoute exact path='/' component={Dashboard} />
+          <Route  path='/personalpage' component={PersonalPage} />
           <Route  path='/login' component={Login} />
           <Route  path='/signup' component={SignUp} />
         </Switch>

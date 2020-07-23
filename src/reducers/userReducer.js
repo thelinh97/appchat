@@ -1,7 +1,8 @@
 import{ userConstants } from '../actions/constants';
 const initState = {
     users: [],
-    conversations: []
+    conversations: [],
+    uploadAvatarStatus: '',
 }
 
 export default (state = initState, action ) => {
@@ -27,6 +28,17 @@ export default (state = initState, action ) => {
                 conversations: action.payload.conversations
             }
             break;
+        case `${userConstants.UPLOAD_AVATAR_USER}_REQUEST`:
+            state = {
+                ...state,
+                uploadAvatarStatus: action.payload.mess
+            }
+            break;
+        case `${userConstants.UPLOAD_AVATAR_USER}_SUCCESS`:
+            state = {
+                ...state,
+                uploadAvatarStatus: ''
+            }
         default:
             break;
     }
