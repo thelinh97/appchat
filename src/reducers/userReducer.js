@@ -39,6 +39,25 @@ export default (state = initState, action ) => {
                 ...state,
                 uploadAvatarStatus: ''
             }
+            break;
+        case `${userConstants.UPLOAD_AVATAR_USER}_FAILURE`:
+            state = {
+                ...state,
+                uploadAvatarStatus: action.payload.mess
+            }
+            break;
+        case `${userConstants.POST_USER}_REQUEST`:
+            state = {
+                ...state,
+                isLoading: action.payload.isLoading
+            }
+            break;
+        case `${userConstants.POST_USER}_SUCCESS`:
+            state = {
+                ...state,
+                isLoading: action.payload.isLoading
+            }
+            break;
         default:
             break;
     }

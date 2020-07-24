@@ -1,5 +1,7 @@
 import { userConstants } from './constants';
 import { firestore, storage, auth } from 'firebase';
+import { message } from 'antd'
+
 
 export const getRealtimeUser = (uid) => {
     return async dispatch => {
@@ -90,7 +92,6 @@ export const uploadAvatar = (info, uid) => {
                 })
             
             const img = info.file.originFileObj;
-            console.log(img.name);
             var uploadTask =  storage().ref(`img/${img.name}`).put(img);
             uploadTask.on('state_changed', function(snapshot){}, function(error) {
                 // Handle unsuccessful uploads
@@ -99,29 +100,28 @@ export const uploadAvatar = (info, uid) => {
                 // Handle successful uploads on complete
                 // For instance, get the download URL: https://firebasestorage.googleapis.com/...
                 storage().ref('img').child(img.name).getDownloadURL().then(function(downloadURL) {
-                  console.log(downloadURL);
                   localStorage.setItem('avatar', downloadURL)
                   var user = auth().currentUser;
                     user.updateProfile({
                     photoURL: downloadURL
                     }).then(function() {
                     // Update successful.
-
+ 
                         const db = firestore();
-                        db.collection('users')
-                        .doc(uid)
+                         db.collection('users')
+                         .doc(uid)
                         .update({
-                            avatar: downloadURL
-                        })
-                        .then(() => {
-
-                            dispatch({
-                                type: `${userConstants.UPLOAD_AVATAR_USER}_SUCCESS`
+                           avatar: downloadURL
+                         })
+                         .then(() => {
+                             message.info('Đổi ảnh đaị diện thành công')
+                             dispatch({
+                               type: `${userConstants.UPLOAD_AVATAR_USER}_SUCCESS`
                             })
 
-                        })
-                        .catch((err) => {
-                            console.log(err)
+                         })
+                         .catch((err) => {
+                             console.log(err)
                         })
                     
                     })
@@ -129,10 +129,73 @@ export const uploadAvatar = (info, uid) => {
                     // An error happened.
                     dispatch({
                         type: `${userConstants.UPLOAD_AVATAR_USER}_FAILURE`,
-                        payload: { error }
+                        payload: { mess: 'upload failure!' }
                     })
                     });
                 });
               });
              }
     }
+
+export const post = (files, content, uid ) => {
+   
+    return   dispatch => {
+        const listImg = [];
+        dispatch({
+            type: `${userConstants.POST_USER}_REQUEST`,
+            payload: { isLoading: true }
+        });
+            
+        for (const file of files) {   
+                const img = file;
+                var uploadTask =  storage().ref(`posts/${img.name}`).put(img);
+                uploadTask.on('state_changed', function(snapshot){}, function(error) {
+                
+                    alert(error);
+                  },  function() {
+                    
+                    storage().ref('posts').child(img.name).getDownloadURL()
+                    .then( function(downloadURL) {
+                        listImg.push(downloadURL);
+                     if(listImg.length === files.length){
+                        const db = firestore();
+                        db.collection('posts')
+                        .add({
+                          user_uid: uid,
+                          imgList: [...listImg],
+                          content: content,
+                          createdAt: new Date()
+                                   })
+                          .then(() => {
+                              message.info('Đăng bài viết thành công')
+                      
+                           })
+                          .catch((err) => {
+          
+                                console.log(err)
+          
+                                  })
+                     }
+                      
+                      console.log(listImg)
+                      dispatch({
+                          type: `${userConstants.POST_USER}_SUCCESS`,
+                          payload: { isLoading: false }
+                      });
+                      
+                    })
+                    .catch((err) => { console.log(err) })
+                    
+                  })
+    
+    
+    
+            };
+            
+        }
+
+        }
+   
+    
+    
+

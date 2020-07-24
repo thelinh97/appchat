@@ -26,9 +26,9 @@ function App() {
   },[]);
 
   return (
-    <Layout style={{height: '100vh'}}>
-      <Header><MenuTop/></Header>
-      <Content>
+    <Layout>
+      <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }} ><MenuTop/></Header>
+      <Content className="site-layout" style={{ marginTop: 64 }} >
         <Switch>
           <PrivateRoute exact path='/' component={Dashboard} />
           <Route  path='/personalpage' component={PersonalPage} />
@@ -36,7 +36,6 @@ function App() {
           <Route  path='/signup' component={SignUp} />
         </Switch>
       </Content>
-      <Footer style={{ textAlign: 'center', marginTop: '20px'}}>App Chat created by The Linh @2020</Footer>
     </Layout>
   );
 }

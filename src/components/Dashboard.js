@@ -3,7 +3,8 @@ import './Dashboard.css';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getRealtimeUser, updateMessage, getRealTimeMessage } from '../actions/userAction';
-import avatarDemo from '../img/avatardemo.jpg'
+import avatarDemo from '../img/avatardemo.jpg';
+import {Row} from 'antd'
 
 const User = (props) =>{
     const {user, onClick } = props;  
@@ -69,6 +70,7 @@ export default function Dashboard (props) {
     }
 
     return(
+        
      <section className="container">
     <div className="listOfUsers">
         {users.users.length > 0 ? users.users.map( (user) => {
@@ -111,5 +113,6 @@ export default function Dashboard (props) {
         }
     </div>
 </section>
+
     )
 }
